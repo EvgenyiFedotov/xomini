@@ -1,69 +1,54 @@
 import io from 'socket.io';
-import { createStore } from 'redux';
 import namespace from './namespace';
-
-import rooms from 'reducers/rooms';
-import { actions as userConfigActions } from 'reducers/userConfig';
-import { actions as roomsActions } from 'reducers/rooms';
-import { actions as usersActions } from 'reducers/users';
+import { createStore } from 'redux';
+import * as reducers from 'reducers';
+import * as usersActs from 'reducers/server/users/actions';
+import * as roomsActs from 'reducers/server/rooms/actions';
 
 export default function(httpServer) {
    const server = new io(httpServer, {
       serveClient: false,
       wsEngine: 'ws'
    });
-   const store = createStore(rooms);
+   const store = createStore(reducers.server);
 
    namespace(server, {
-      'rooms#create': (common, nameRoom, login) => {
-         const { socket, socketEmit, namespaceEmit, dispatch, getState } = common;
-         const accessUserAct = roomsActions.accessUser(nameRoom, login);
+      'connection': (common) => {
+         const { dispatch, socketId } = common;
 
-         dispatch(accessUserAct);
+         dispatch(usersActs.addUser(
+            socketId
+         ));
+      },
+      'inRoom': (common, login, nameRoom) => {
+         const { dispatch, socketId } = common;
+         const roomAddUser = roomsActs.addUser(nameRoom, login);
 
-         if (accessUserAct.access) {
-            socket.nameRoom = nameRoom;
-            socket.login = login;
+         dispatch(roomAddUser);
 
-            socket.join(nameRoom);
-
-            dispatch(roomsActions.create(nameRoom));
-            dispatch(roomsActions.addUser(nameRoom, login));
-
-            socketEmit([
-               userConfigActions.setNameRoom(nameRoom),
-               userConfigActions.setLogin(login)
-            ]);
-
-            namespaceEmit([
-               usersActions.update(getState()[nameRoom].users)
-            ], nameRoom);
+         if (roomAddUser.access !== false) {
+            dispatch(usersActs.updateUser(socketId, {
+               login
+            }));
          }
 
          return {
-            result: accessUserAct.access
+            result: roomAddUser.access
          };
       },
-      'rooms#removeUser': common => removeUser(common),
-      'disconnecting': common => removeUser(common)
+      'disconnecting': (common) => {
+         const { dispatch, socketId } = common;
+         const removeUserAct = usersActs.removeUser(socketId);
+
+         dispatch(removeUserAct);
+
+         const { login } = removeUserAct.user || {};
+
+         if (login) {
+            dispatch(roomsActs.removeUser(login));
+         }
+      }
    }, {
       store
    });
-};
-
-function removeUser(common) {
-   const { socket, socketEmit, namespaceEmit, dispatch, getState } = common;
-   const { nameRoom, login } = socket;
-
-   if (nameRoom && login) {
-      dispatch(roomsActions.removeUser(nameRoom, login));
-
-      socketEmit([userConfigActions.reset()]);
-
-      namespaceEmit([
-         usersActions.update(getState()[nameRoom].users)
-      ], nameRoom);
-
-      dispatch(roomsActions.removeEmpty(nameRoom));
-   }
 };

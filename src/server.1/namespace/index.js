@@ -5,24 +5,17 @@
  * @param {Store} [options.store]
  */
 export default function(namespace, callbacks = {}, options = {}) {
-   const { connection } = callbacks;
    const { store } = options;
 
    namespace.on('connection', socket => {
       const common = {
          socket,
-         socketId: socket.id,
          store: store,
          dispatch: store && store.dispatch,
          getState: store && store.getState,
          socketEmit: (actions, rooms = []) => emit(socket, actions, rooms),
          namespaceEmit: (actions, rooms = []) => emit(namespace, actions, rooms)
       };
-
-      if (connection instanceof Function) {
-         connection(common);
-         delete callbacks['connection'];
-      }
 
       Object.keys(callbacks).forEach(nameEvent => {
          let eventCallbacks = callbacks[nameEvent];
@@ -47,7 +40,7 @@ export function subscribe(common, nameEvent, callback) {
    const { socket } = common;
 
    socket.on(nameEvent, (...args) => {
-      const cbResult = callback(common, ...args) || {};
+      const cbResult = callback.call(socket, common, ...args) || {};
 
       if ('result' in cbResult) {
          socket.emit(nameEvent + ':result', cbResult.result);

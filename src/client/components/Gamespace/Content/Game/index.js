@@ -2,13 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Button } from '@material-ui/core';
 import VideogameAsset from '@material-ui/icons/VideogameAsset';
-import { actions as gameActions } from 'reducers/game';
 
 export class Game extends Component {
    createGame = () => {
       const { dispatch, userConfig } = this.props;
-
-      dispatch(gameActions.create(userConfig.login));
    };
 
    render() {

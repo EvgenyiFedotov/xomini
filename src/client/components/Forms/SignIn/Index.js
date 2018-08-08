@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Input, Button } from '@material-ui/core';
-
-import { emit, once } from 'reducers/socket/actions';
+import { emit, once } from 'reducers/client/socket/actions';
 
 export class Signin extends Component {
    values = {
@@ -23,23 +22,19 @@ export class Signin extends Component {
    };
 
    signin = () => {
-      const { dispatch } = this.props;
-      let { nameRoom, login } = this.values;
+      let { dispatch } = this.props;
+      let { login, nameRoom } = this.values;
 
       if (nameRoom && nameRoom !== '' && login && login !== '') {
-         dispatch(once(
-            'rooms#create:result', result => {
-               if (!result) {
-                  this.setState({ isValidError: true });
-               }
-            }
-         ));
+         dispatch(once('inRoom:result', result => {
+            console.log('@result', result);
 
-         dispatch(emit(
-            'rooms#create',
-            nameRoom,
-            login
-         ));
+            if (result === false) {
+               this.setState({ isValidError: true });
+            }
+         }));
+
+         dispatch(emit('inRoom', login, nameRoom));
       } else {
          this.setState({ isValidError: true });
       }
