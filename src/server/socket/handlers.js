@@ -43,19 +43,19 @@ export function disconnecting(common) {
 
    const { login } = removeUserAct.user || {};
 
-   if (login) {
-      const removeUserAct = roomsActs.removeUser(login);
+   removeUser(login, dispatch, getState, namespaceEmit);
+};
 
-      dispatch(removeUserAct);
+export function exit(common, userInfo = {}) {
+   const { dispatch, getState, socketEmit, namespaceEmit } = common;
+   const { login } = userInfo;
 
-      if (removeUserAct.rooms && removeUserAct.rooms.length) {
-         const state = getState()
+   removeUser(login, dispatch, getState, namespaceEmit);
 
-         removeUserAct.rooms.forEach(nameRoom => {
-            roomUpdate(namespaceEmit, state, nameRoom);
-         });
-      }
-   }
+   socketEmit([
+      userInforActs.reset(),
+      roomActs.reset()
+   ]);
 };
 
 function roomUpdate(namespaceEmit, state, nameRoom) {
@@ -64,4 +64,20 @@ function roomUpdate(namespaceEmit, state, nameRoom) {
          state.rooms[nameRoom]
       )
    ], [nameRoom]);
+};
+
+function removeUser(login, dispatch, getState, namespaceEmit) {
+   if (login && dispatch && getState && namespaceEmit) {
+      const removeUserAct = roomsActs.removeUser(login);
+
+      dispatch(removeUserAct);
+
+      if (removeUserAct.rooms && removeUserAct.rooms.length) {
+         const state = getState();
+
+         removeUserAct.rooms.forEach(nameRoom => {
+            roomUpdate(namespaceEmit, state, nameRoom);
+         });
+      }
+   }
 };

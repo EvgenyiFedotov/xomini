@@ -50,7 +50,7 @@ export function subscribe(common, nameEvent, callback) {
       const cbResult = callback(common, ...args) || {};
 
       if ('result' in cbResult) {
-         socket.emit(nameEvent + ':result', cbResult.result);
+         socket.emit(nameEvent + '_result', cbResult.result);
       }
    });
 };

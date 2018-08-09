@@ -1,4 +1,4 @@
-import { types } from '.';
+import {  types } from '.';
 
 export function addUser(userId) {
    return {
@@ -34,5 +34,11 @@ export function update(params = {}) {
    return {
       type: types.update,
       users
+   };
+};
+
+export function reset() {
+   return {
+      type: types.reset
    };
 };

@@ -26,7 +26,7 @@ export class Signin extends Component {
       let { login, nameRoom } = this.values;
 
       if (nameRoom && nameRoom !== '' && login && login !== '') {
-         dispatch(once('inRoom:result', result => {
+         dispatch(once('inRoom_result', result => {
             if (result === false) {
                this.setState({ isValidError: true });
             }
