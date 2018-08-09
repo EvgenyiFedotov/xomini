@@ -33,9 +33,9 @@ export class Gamespace extends Component {
 
    render() {
       const { mode } = this.state;
-      const { userConfig } = this.props;
-      const usersCount = Object.keys(this.props.users).length;
-      const people = <Badge badgeContent={usersCount} color="primary">
+      const { userInfo, room } = this.props;
+      const users = room ? room.users : [];
+      const people = <Badge badgeContent={users.length} color="primary">
          <People />
       </Badge>;
       let content;
@@ -52,7 +52,7 @@ export class Gamespace extends Component {
                <AppBar position="static" color="default">
                   <Toolbar>
                      <Typography variant="title" color="inherit">
-                        {userConfig.nameRoom}
+                        {userInfo.room}
                      </Typography>
 
                      <div className="login">
@@ -62,7 +62,7 @@ export class Gamespace extends Component {
                               color="primary"
                            />
 
-                           {userConfig.login}
+                           {userInfo.login}
                         </Button>
                      </div>
                   </Toolbar>

@@ -1,3 +1,5 @@
+export * as actions from './actions';
+
 export const types = {
    add: 'SOCKET_ADD',
    remove: 'SOCKET_REMOVE',
@@ -5,8 +7,6 @@ export const types = {
    once: 'SOCKET_ONCE',
    on: 'SOCKET_ON'
 };
-
-export * as actions from './actions';
 
 export default function(store = null, action) {
    const { type } = action;

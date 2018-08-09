@@ -12,20 +12,20 @@ export class App extends Component {
 
       dispatch(action);
 
-      // dispatch(socketActions.on(
-      //    'actions', (...actions) => {
-      //       actions.forEach(action => {
-      //          dispatch(action);
-      //       });
-      //    }
-      // ));
+      dispatch(socketActions.on(
+         'actions', (...actions) => {
+            actions.forEach(action => {
+               dispatch(action);
+            });
+         }
+      ));
    };
 
    render() {
-      const { userConfig } = this.props;
+      const { userInfo } = this.props;
       let content;
 
-      if (userConfig && userConfig.login && userConfig.nameRoom) {
+      if (userInfo && userInfo.login && userInfo.room) {
          content = <Gamespace />;
       } else {
          content = <Signin />;

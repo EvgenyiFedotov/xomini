@@ -1,3 +1,5 @@
+import room, { actions as roomActions } from 'reducers/common/room';
+
 export function addRoom(store, action) {
    const { id } = action;
 
@@ -12,13 +14,10 @@ export function addRoom(store, action) {
 };
 
 export function createRoom(params = {}) {
-   let { users } = params;
-
-   users = users instanceof Array ? users : [];
-
-   return {
-      users
-   };
+   return room(
+      undefined,
+      roomActions.addUsers(params.users)
+   );
 };
 
 export function removeRoom(store, action) {
@@ -37,19 +36,18 @@ export function removeRoom(store, action) {
 
 export function addUser(store, action) {
    const { id, userId } = action;
-   const room = store[id];
 
-   if (room) {
-      const { users } = room;
+   if (store[id]) {
+      const addUserAct = roomActions.addUser(userId);
 
-      if (users && users.indexOf(userId) === -1) {
-         users.push(userId);
+      store[id] = room(store[id], addUserAct);
 
+      if (addUserAct.access === false) {
+         action.access = false;
+      } else {
          return {
             ...store
          };
-      } else {
-         action.access = false;
       }
    } else {
       return addUser(addRoom(store, action), action);
@@ -61,20 +59,18 @@ export function addUser(store, action) {
 export function removeUser(store, action) {
    const { userId } = action;
    let isChange = false;
-
-   Object.keys(store).filter(id => {
+   const rooms = Object.keys(store).filter(id => {
       return store[id].users.indexOf(userId) !== -1;
-   }).filter(id => {
-      const { users } = store[id];
-      const userIndex = users.indexOf(userId);
+   });
 
+   action.rooms = rooms;
+
+   rooms.filter(id => {
       isChange = true;
 
-      if (userIndex !== -1) {
-         users.splice(userIndex, 1);
-      }
+      store[id] = room(store[id], roomActions.removeUser(userId));
 
-      return users.length === 0;
+      return store[id].length === 0;
    }).forEach(id => {
       removeRoom(store, { id });
    });

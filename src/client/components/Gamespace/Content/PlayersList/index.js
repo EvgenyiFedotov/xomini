@@ -7,16 +7,16 @@ import {
 
 export class PlayersList extends Component {
    render() {
-      const { users } = this.props;
-      const usersList = Object.keys(users).map((login, index) => {
-         return <ListItem key={index} button>{login}</ListItem>;
-      });
+      const { room } = this.props;
+      const users = room ? room.users : [];
 
       return (
          <div className="players-list">
-            <List>
-               {usersList}
-            </List>
+            <List>{
+               users.map((login, index) => {
+                  return <ListItem key={index} button>{login}</ListItem>;
+               })
+            }</List>
          </div>
       );
    };
