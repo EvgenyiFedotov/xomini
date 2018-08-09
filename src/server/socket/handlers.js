@@ -16,6 +16,7 @@ export function inRoom(common, login, nameRoom) {
    dispatch(roomsActs.addUser(nameRoom, login));
    dispatch(roomsActs.addUser(nameRoom, login + '#1'));
    dispatch(roomsActs.removeUser(login + '#1'));
+   // dispatch(roomsActs.removeUser(login));
 
    console.log(getState().rooms);
 };

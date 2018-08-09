@@ -9,7 +9,7 @@ export function add(id) {
 
 export function remove(id) {
    return {
-      type: types.add,
+      type: types.remove,
       id
    };
 };
