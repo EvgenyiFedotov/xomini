@@ -1,7 +1,7 @@
 import io from 'socket.io';
 import namespace from '../namespace';
 import { createStore } from 'redux';
-import { server as reducerServer } from 'reducers';
+import * as reducers from 'reducers';
 import * as handlers from './handlers';
 
 export default function(httpServer) {
@@ -9,7 +9,7 @@ export default function(httpServer) {
       serveClient: false,
       wsEngine: 'ws'
    });
-   const store = createStore(reducerServer);
+   const store = createStore(reducers.server);
 
    namespace(server, handlers, {
       store

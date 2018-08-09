@@ -9,15 +9,7 @@ export function add(id) {
 
 export function remove(id) {
    return {
-      type: types.remove,
+      type: types.add,
       id
-   };
-};
-
-export function login(id, login) {
-   return {
-      type: types.login,
-      id,
-      login
    };
 };

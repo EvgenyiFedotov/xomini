@@ -1,11 +1,11 @@
-import { addRoom, removeRoom, addUser, removeUser } from './common';
+import * as handlers from './handlers';
 
 export * as actions from './actions';
-export * as common from './common';
+export * as handlers from './handlers';
 
 export const types = {
-   addRoom: 'ROOMS_ADD_ROOM',
-   removeRoom: 'ROOMS_REMOVE_ROOM',
+   add: 'ROOMS_ADD',
+   remove: 'ROOMS_REMOVE',
    addUser: 'ROOMS_ADD_USER',
    removeUser: 'ROOMS_REMOVE_USER'
 };
@@ -13,14 +13,14 @@ export const types = {
 export default function(store = {}, action) {
    const { type } = action;
 
-   if (type === types.addRoom) {
-      return addRoom(store, action);
-   } else if (type === types.removeRoom) {
-      return removeRoom(store, action);
+   if (type === types.add) {
+      return handlers.add(store, action);
+   } else if (type === types.remove) {
+      return handlers.remove(store, action);
    } else if (type === types.addUser) {
-      return addUser(store, action);
+      return handlers.addUser(store, action);
    } else if (type === types.removeUser) {
-      return removeUser(store, action);
+      return handlers.removeUser(store, action);
    }
 
    return store;

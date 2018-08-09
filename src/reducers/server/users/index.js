@@ -1,26 +1,23 @@
-import { addUser, updateUser, removeUser, update } from './common';
-
-export const types = {
-   addUser: 'USERS_ADD_USER',
-   updateUser: 'USERS_UPDATE_USER',
-   removeUser: 'USERS_REMOVE_USER',
-   update: 'USERS_UPDATE'
-};
+import * as handlers from './handlers';
 
 export * as actions from './actions';
-export * as common from './common';
+export * as handlers from './handlers';
+
+export const types = {
+   add: 'USERS_ADD',
+   remove: 'USERS_REMOVE',
+   login: 'USERS_LOGIN'
+};
 
 export default function(store = {}, action) {
    const { type } = action;
 
-   if (type === types.addUser) {
-      return addUser(store, action);
-   } else if (type === types.updateUser) {
-      return updateUser(store, action);
-   } else if (type === types.removeUser) {
-      return removeUser(store, action);
-   } else if (type === types.update) {
-      return update(store, action);
+   if (type === types.add) {
+      return handlers.add(store, action);
+   } else if (type === types.remove) {
+      return handlers.remove(store, action);
+   } else if (type === types.login) {
+      return handlers.login(store, action);
    }
 
    return store;

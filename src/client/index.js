@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './components/App';
 import { createStore } from 'redux';
-import { client } from '../reducers';
+import { client } from 'reducers';
 import { Provider } from 'react-redux';
 
 import HtmlStyle from './components/Html/Style.less';

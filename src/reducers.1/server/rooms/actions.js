@@ -1,15 +1,16 @@
 import { types } from '.';
 
-export function add(id) {
+export function addRoom(id, params = {}) {
    return {
-      type: types.add,
-      id
+      type: types.addRoom,
+      id,
+      params
    };
 };
 
-export function remove(id) {
+export function removeRoom(id) {
    return {
-      type: types.remove,
+      type: types.removeRoom,
       id
    };
 };

@@ -16,7 +16,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 import VideogameAsset from '@material-ui/icons/VideogameAsset';
 import Game from './Content/Game';
 import PlayersList from './Content/PlayersList';
-import { emit } from 'reducers/client/socket/actions';
+// import { emit } from 'reducers/client/socket/actions';
 
 export class Gamespace extends Component {
    state = {
@@ -27,7 +27,7 @@ export class Gamespace extends Component {
       const { dispatch, userInfo } = this.props;
 
       if (value === 'exit') {
-         dispatch(emit('exit', userInfo));
+         // dispatch(emit('exit', userInfo));
       } else {
          this.setState({ mode: value });
       }

@@ -6,3 +6,6 @@ export default combineReducers({
    users,
    rooms
 });
+
+export * as users from './users';
+export * as rooms from './rooms';
