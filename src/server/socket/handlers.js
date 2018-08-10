@@ -1,22 +1,21 @@
-import * as usersActs from 'reducers/server/users/actions';
-import * as roomsActs from 'reducers/server/rooms/actions';
+import { usersActions } from 'reducers/server/users';
+import { roomsActions } from 'reducers/server';
 
 export function connection(common) {
    const { dispatch, getState, socketId } = common;
 
-   dispatch(usersActs.add(socketId));
+   dispatch(usersActions.add(socketId));
+   dispatch(usersActions.remove(socketId));
 
-   inRoom(common, '@login', '@nameRoom');
+   console.log(getState());
+
+   dispatch(usersActions.add(socketId));
+   dispatch(usersActions.login(socketId, 'Dima'));
+   dispatch(roomsActions.add())
+
+   console.log(getState());
 };
 
 export function inRoom(common, login, nameRoom) {
    const { dispatch, getState, socketId } = common;
-
-   dispatch(usersActs.login(socketId, login));
-   dispatch(roomsActs.addUser(nameRoom, login));
-   dispatch(roomsActs.addUser(nameRoom, login + '#1'));
-   dispatch(roomsActs.removeUser(login + '#1'));
-   // dispatch(roomsActs.removeUser(login));
-
-   console.log(getState().rooms);
 };
