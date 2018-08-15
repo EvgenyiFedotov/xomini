@@ -71,9 +71,13 @@ export const usersHandlers = {
 
 export default function(store = {}, action) {
    switch (action.type) {
-      case usersTypes.add: return usersHandlers.add(store, action);
-      case usersTypes.remove: return usersHandlers.remove(store, action);
-      case usersTypes.login: return usersHandlers.login(store, action);
-      default: return store;
+      case usersTypes.add:
+         return usersHandlers.add(store, action);
+      case usersTypes.remove:
+         return usersHandlers.remove(store, action);
+      case usersTypes.login:
+         return usersHandlers.login(store, action);
+      default:
+         return store;
    }
 };
